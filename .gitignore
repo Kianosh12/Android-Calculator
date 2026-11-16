@@ -19,3 +19,6 @@ keystore.properties
 # Misc
 .DS_Store
 *.log
+
+# Built APKs
+*.apk
