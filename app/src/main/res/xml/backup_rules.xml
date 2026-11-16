@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   No backup rules for now; the calculator keeps no user data.
+-->
+<full-backup-content />
