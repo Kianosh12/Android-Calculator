@@ -40,7 +40,7 @@ class CalculatorTest {
         assertEquals(14.0, eval("2+3*4")!!, 1e-9)
         assertEquals(20.0, eval("(2+3)*4")!!, 1e-9)
         assertEquals(1.0, eval("8/2/4")!!, 1e-9)
-        assertEquals(2.0, eval("4/2*4")!!, 1e-9)
+        assertEquals(8.0, eval("4/2*4")!!, 1e-9)
     }
 
     @Test
@@ -52,9 +52,22 @@ class CalculatorTest {
     }
 
     @Test
-    fun `percent divides by one hundred`() {
+    fun `percent divides by one hundred when used on its own`() {
         assertEquals(0.5, eval("50%")!!, 1e-9)
+        assertEquals(0.05, eval("5%")!!, 1e-9)
+    }
+
+    @Test
+    fun `percent after plus or minus is relative to the left operand`() {
         assertEquals(105.0, eval("100+5%")!!, 1e-9)
+        assertEquals(220.0, eval("200+10%")!!, 1e-9)
+        assertEquals(180.0, eval("200-10%")!!, 1e-9)
+    }
+
+    @Test
+    fun `percent inside a multiplication is a plain division by one hundred`() {
+        assertEquals(20.0, eval("200*10%")!!, 1e-9)
+        assertEquals(100.1, eval("100+2*5%")!!, 1e-9)
     }
 
     @Test

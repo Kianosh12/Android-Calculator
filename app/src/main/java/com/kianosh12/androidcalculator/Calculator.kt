@@ -129,6 +129,13 @@ object Calculator {
     private class Parser(private val tokens: List<Token>) {
         private var index = 0
 
+        /**
+         * When set, a `%` is interpreted relative to this value instead of being a
+         * plain division by 100. That makes `100 + 5%` evaluate to `105` (like the
+         * calculators on iOS and Android do) while a standalone `50%` stays `0.5`.
+         */
+        private var percentBase: Double? = null
+
         fun atEnd(): Boolean = index >= tokens.size
 
         private fun peek(): Token? = tokens.getOrNull(index)
@@ -139,7 +146,9 @@ object Calculator {
                 val token = peek()
                 if (token is Token.Op && (token.symbol == '+' || token.symbol == '-')) {
                     index++
+                    percentBase = value
                     val right = parseTerm()
+                    percentBase = null
                     value = if (token.symbol == '+') value + right else value - right
                 } else {
                     break
@@ -150,6 +159,8 @@ object Calculator {
 
         private fun parseTerm(): Double {
             var value = parseFactor()
+            // The percent context only applies to the operand directly after + or -.
+            percentBase = null
             while (true) {
                 val token = peek()
                 if (token is Token.Op && (token.symbol == '*' || token.symbol == '/')) {
@@ -174,7 +185,10 @@ object Calculator {
 
             if (token is Token.Paren && token.symbol == '(') {
                 index++
+                val outerPercentBase = percentBase
+                percentBase = null
                 val value = parseExpression()
+                percentBase = outerPercentBase
                 val closing = peek()
                 if (closing !is Token.Paren || closing.symbol != ')') {
                     throw IllegalArgumentException("Missing closing parenthesis")
@@ -186,12 +200,12 @@ object Calculator {
             if (token is Token.Num) {
                 index++
                 var value = token.value
-                // `%` is a postfix operator: it divides the preceding number by 100.
                 while (true) {
                     val next = peek()
                     if (next is Token.Op && next.symbol == '%') {
                         index++
-                        value /= 100.0
+                        val base = percentBase
+                        value = if (base != null) value * base / 100.0 else value / 100.0
                     } else {
                         break
                     }
