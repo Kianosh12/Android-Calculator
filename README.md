@@ -12,6 +12,8 @@ A minimal, fast calculator for Android — built with Kotlin and Jetpack Compose
 - Live result preview while you type
 - `±` to flip the sign of the current number
 - `⌫` to delete, `AC` to clear
+- Percentage follows the usual calculator convention: `100 + 5%` is `105`,
+  while a standalone `50%` is `0.5`
 - Haptic feedback on every key press
 - Dark theme, edge-to-edge, rotates without losing your calculation
 - Tiny and dependency-light — no ads SDK, no permissions
@@ -26,6 +28,18 @@ A minimal, fast calculator for Android — built with Kotlin and Jetpack Compose
 
 - Android 8.0 (API 26) or newer
 - The app requests **no permissions**
+
+## Install the prebuilt APK
+
+A signed release APK is attached to the
+[latest successful run](https://github.com/Kianosh12/Android-Calculator/actions/workflows/android.yml).
+
+1. Download the `android-calculator-release` artifact from the Actions tab
+   (or `gh run download --name android-calculator-release`).
+2. Copy `app-release.apk` to your phone.
+3. Open it and allow your file manager to "install unknown apps" — Android asks
+   for this permission the first time you sideload an app.
+4. The installed app is called **Calculator**.
 
 ## Build from source
 
