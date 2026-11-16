@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -21,7 +23,7 @@ android {
     signingConfigs {
         // A release keystore is optional. When `keystore.properties` is present the
         // release build is signed with it, otherwise only debug builds are produced.
-        val keystoreProperties = java.util.Properties()
+        val keystoreProperties = Properties()
         val keystorePropertiesFile = rootProject.file("keystore.properties")
         if (keystorePropertiesFile.exists()) {
             keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
